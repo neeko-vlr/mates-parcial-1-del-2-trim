@@ -20,13 +20,24 @@
 
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; transition: background-color 0.3s, color 0.3s; }
-        .correct-answer { background-color: #dcfce7 !important; border-color: #22c55e !important; color: #14532d; }
-        .wrong-answer { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #7f1d1d; }
+        
+        /* Nuevos estilos para los bordes de respuesta */
+        .question-correct { border: 3px solid #22c55e !important; box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
+        .question-wrong { border: 3px solid #ef4444 !important; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+        
+        /* Estilos para los botones individuales */
+        .btn-correct { background-color: #14532d !important; color: #f0fdf4 !important; border-color: #22c55e !important; }
+        .btn-wrong { background-color: #7f1d1d !important; color: #fef2f2 !important; border-color: #ef4444 !important; }
+
         .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .nav-btn-active { background-color: white; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); color: #1d4ed8; }
         .dark .nav-btn-active { background-color: #334155; color: #93c5fd; }
+        
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+        .explanation-box { animation: slideDown 0.4s ease-out; }
+        @keyframes slideDown { from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 300px; } }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-slate-950 h-screen flex flex-col overflow-hidden transition-colors duration-300">
@@ -42,12 +53,12 @@
 
         <div class="max-w-5xl mx-auto text-center">
             <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-2">Física 1º Bachillerato</h1>
-            <p class="text-slate-500 dark:text-slate-400 mb-8 font-medium">Cinemática: Guía Detallada de Estudio</p>
+            <p class="text-slate-500 dark:text-slate-400 mb-8 font-medium italic">Repaso Intensivo: Cinemática</p>
             
             <nav class="inline-flex bg-slate-100 dark:bg-slate-800 p-1.5 rounded-2xl shadow-inner border border-slate-200 dark:border-slate-700 w-full max-w-2xl">
-                <button onclick="switchTab('theory')" id="btn-theory" class="flex-1 px-4 py-3.5 rounded-xl font-bold text-sm md:text-base transition-all duration-300 nav-btn-active">Teoría</button>
+                <button onclick="switchTab('theory')" id="btn-theory" class="flex-1 px-4 py-3.5 rounded-xl font-bold text-sm md:text-base transition-all duration-300">Teoría</button>
                 <button onclick="switchTab('formulas')" id="btn-formulas" class="flex-1 px-4 py-3.5 rounded-xl font-bold text-sm md:text-base transition-all duration-300 text-slate-600 dark:text-slate-400">Fórmulas</button>
-                <button onclick="switchTab('quiz')" id="btn-quiz" class="flex-1 px-4 py-3.5 rounded-xl font-bold text-sm md:text-base transition-all duration-300 text-slate-600 dark:text-slate-400">Prueba</button>
+                <button onclick="switchTab('quiz')" id="btn-quiz" class="flex-1 px-4 py-3.5 rounded-xl font-bold text-sm md:text-base transition-all duration-300 nav-btn-active">Prueba</button>
             </nav>
         </div>
     </header>
@@ -55,77 +66,20 @@
     <main class="flex-1 overflow-y-auto bg-white dark:bg-slate-950 transition-colors duration-300">
         
         <!-- PESTAÑA 1: TEORÍA -->
-        <div id="theory-content" class="tab-content active max-w-4xl mx-auto p-6 md:p-12">
-            <h2 class="text-3xl font-black text-slate-800 dark:text-white mb-8 border-b-4 border-blue-500 pb-2 inline-block">Explicación de Conceptos Clave</h2>
-            
+        <div id="theory-content" class="tab-content max-w-4xl mx-auto p-6 md:p-12">
+            <h2 class="text-3xl font-black text-slate-800 dark:text-white mb-8 border-b-4 border-blue-500 pb-2 inline-block">Conceptos de Aceleración</h2>
             <div class="space-y-12">
-                <!-- TEMA 8: ACELERACIÓN -->
                 <article>
-                    <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6 flex items-center">Componentes Intrínsecas de la Aceleración</h3>
-                    <p class="text-slate-600 dark:text-slate-400 mb-6">
-                        En física, cuando un objeto se mueve, su velocidad puede cambiar de dos formas: puede ir más rápido/lento, o puede cambiar de dirección. Para estudiar esto usamos dos "partes" de la aceleración:
-                    </p>
-                    
+                    <h3 class="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-6">Componentes Intrínsecas</h3>
                     <div class="grid gap-6">
                         <div class="bg-blue-50 dark:bg-slate-900 p-6 rounded-2xl border-l-4 border-blue-500">
-                            <h4 class="font-bold text-blue-800 dark:text-blue-300 text-lg mb-3">1. Aceleración Tangencial ($a_t$)</h4>
-                            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">
-                                Es la que va "en la línea" del movimiento (tangente a la trayectoria). Su única misión es <b>cambiar el módulo de la velocidad</b> (la rapidez).
-                            </p>
-                            <ul class="text-sm space-y-2 text-slate-700 dark:text-slate-300 list-disc list-inside">
-                                <li>Si $a_t > 0$: El móvil acelera (va más rápido).</li>
-                                <li>Si $a_t < 0$: El móvil frena.</li>
-                                <li>Si $a_t = 0$: La rapidez es constante (como en un MRU).</li>
-                            </ul>
+                            <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2">Aceleración Tangencial ($a_t$)</h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Responsable de cambiar el <b>módulo</b> de la velocidad (la rapidez). Existe si el cuerpo va cada vez más rápido o más lento.</p>
                         </div>
-
                         <div class="bg-emerald-50 dark:bg-slate-900 p-6 rounded-2xl border-l-4 border-emerald-500">
-                            <h4 class="font-bold text-emerald-800 dark:text-emerald-300 text-lg mb-3">2. Aceleración Normal o Centrípeta ($a_n$)</h4>
-                            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-4">
-                                Esta apunta siempre hacia el centro de la curva (es perpendicular a la trayectoria). Su misión es <b>cambiar la dirección del vector velocidad</b>.
-                            </p>
-                            <ul class="text-sm space-y-2 text-slate-700 dark:text-slate-300 list-disc list-inside">
-                                <li><b>¡Importante!:</b> Si hay curva, hay $a_n$. No importa si vas a velocidad constante.</li>
-                                <li>Si $a_n = 0$: El movimiento es rectilíneo (no hay giro).</li>
-                                <li>Fórmula clave: $a_n = v^2 / R$. Cuanto más cerrada sea la curva (R pequeño) o más rápido vayas, mayor será el "tirón" hacia el centro.</li>
-                            </ul>
+                            <h4 class="font-bold text-emerald-800 dark:text-emerald-300 mb-2">Aceleración Normal ($a_n$)</h4>
+                            <p class="text-sm text-slate-600 dark:text-slate-400">Responsable de cambiar la <b>dirección</b> de la velocidad. Aparece siempre que hay una trayectoria curva.</p>
                         </div>
-
-                        <div class="bg-slate-100 dark:bg-slate-800 p-6 rounded-2xl">
-                            <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-2">Aceleración Total ($\vec{a}$)</h4>
-                            <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">
-                                Es la suma vectorial de ambas. Como son perpendiculares entre sí, su módulo se calcula con Pitágoras:
-                                <span class="block text-center text-lg mt-2 font-mono text-blue-600">$$ a = \sqrt{a_t^2 + a_n^2} $$</span>
-                            </p>
-                        </div>
-                    </div>
-                </article>
-
-                <!-- TEMA 9: MOVIMIENTOS -->
-                <article>
-                    <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mb-6">Composición de Movimientos</h3>
-                    <div class="bg-slate-50 dark:bg-slate-900 p-8 rounded-3xl border border-slate-200 dark:border-slate-800">
-                        <h4 class="font-bold text-slate-800 dark:text-slate-200 mb-4">El secreto del Tiro Parabólico</h4>
-                        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed mb-6">
-                            Imaginalo como dos películas reproduciéndose a la vez:
-                        </p>
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
-                                <p class="font-bold text-blue-500 mb-2 underline">Eje X (Horizontal)</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">
-                                    Aquí no hay fuerzas (ignoramos el aire). Por tanto, la velocidad es <b>constante</b>. Es un MRU. El objeto avanza siempre a la misma velocidad hacia adelante.
-                                </p>
-                            </div>
-                            <div class="p-4 bg-white dark:bg-slate-800 rounded-xl shadow-sm">
-                                <p class="font-bold text-indigo-500 mb-2 underline">Eje Y (Vertical)</p>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">
-                                    Aquí manda la gravedad ($g$). Es un MRUA. El objeto sube frenando hasta pararse un instante en el punto más alto, y luego cae acelerando.
-                                </p>
-                            </div>
-                        </div>
-                        <p class="mt-6 text-sm text-slate-600 dark:text-slate-400 italic">
-                            *Nota: El tiempo ($t$) es la única variable que "une" ambos ejes. Es el mismo tiempo para avanzar que para caer.
-                        </p>
                     </div>
                 </article>
             </div>
@@ -133,66 +87,106 @@
 
         <!-- PESTAÑA 2: FÓRMULAS -->
         <div id="formulas-content" class="tab-content max-w-4xl mx-auto p-6 md:p-12">
-            <!-- TEMA 8 -->
-            <section class="mb-16">
-                <div class="flex items-center mb-8">
-                    <div class="h-1 flex-1 bg-blue-100 dark:bg-blue-900/30 rounded"></div>
-                    <h2 class="px-4 text-2xl font-black text-blue-800 dark:text-blue-400 uppercase tracking-widest text-center">Tema 8</h2>
-                    <div class="h-1 flex-1 bg-blue-100 dark:bg-blue-900/30 rounded"></div>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <p class="text-xs font-black text-blue-500 uppercase mb-4">Aceleración Tangencial</p>
-                        <div class="text-2xl py-2 dark:text-white">$$ a_t = \frac{dv}{dt} $$</div>
-                    </div>
-                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
-                        <p class="text-xs font-black text-emerald-500 uppercase mb-4">Aceleración Normal</p>
-                        <div class="text-2xl py-2 dark:text-white">$$ a_n = \frac{v^2}{R} $$</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-slate-900 p-6 rounded-2xl text-white">
+                    <h3 class="text-blue-400 font-bold mb-4">Aceleración</h3>
+                    <div class="space-y-4">
+                        <p>$$ a_t = \frac{dv}{dt} $$</p>
+                        <p>$$ a_n = \frac{v^2}{R} $$</p>
+                        <p>$$ a = \sqrt{a_t^2 + a_n^2} $$</p>
                     </div>
                 </div>
-            </section>
-
-            <!-- TEMA 9 -->
-            <section>
-                <div class="flex items-center mb-8">
-                    <div class="h-1 flex-1 bg-indigo-100 dark:bg-indigo-900/30 rounded"></div>
-                    <h2 class="px-4 text-2xl font-black text-indigo-800 dark:text-indigo-400 uppercase tracking-widest text-center">Tema 9</h2>
-                    <div class="h-1 flex-1 bg-indigo-100 dark:bg-indigo-900/30 rounded"></div>
-                </div>
-                <div class="bg-slate-900 p-10 rounded-3xl text-white">
-                    <h3 class="mb-6 font-bold">Lanzamiento Horizontal</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="bg-slate-800 p-4 rounded-xl">$$ x = v_0 \cdot t $$</div>
-                        <div class="bg-slate-800 p-4 rounded-xl">$$ y = y_0 - \frac{1}{2}gt^2 $$</div>
+                <div class="bg-slate-900 p-6 rounded-2xl text-white">
+                    <h3 class="text-indigo-400 font-bold mb-4">Ecuaciones del Movimiento</h3>
+                    <div class="space-y-4">
+                        <p>$$ \vec{v} = \vec{v}_0 + \vec{a}t $$</p>
+                        <p>$$ \vec{r} = \vec{r}_0 + \vec{v}_0t + \frac{1}{2}\vec{a}t^2 $$</p>
                     </div>
                 </div>
-            </section>
-        </div>
-
-        <!-- PESTAÑA 3: PRUEBA -->
-        <div id="quiz-content" class="tab-content max-w-4xl mx-auto p-6 md:p-12">
-            <div class="bg-slate-900 rounded-[3rem] p-10 shadow-2xl border border-slate-800">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-10 gap-8">
-                    <h2 class="text-3xl font-black text-white">Autoevaluación</h2>
-                    <div class="bg-blue-600 px-8 py-4 rounded-2xl text-white font-black text-2xl" id="score-display">0 / 0</div>
-                </div>
-                <div id="quiz-container" class="space-y-8"></div>
             </div>
         </div>
 
+        <!-- PESTAÑA 3: PRUEBA -->
+        <div id="quiz-content" class="tab-content active max-w-4xl mx-auto p-6 md:p-12">
+            <div class="bg-slate-900 rounded-[2rem] shadow-2xl border border-slate-800 flex flex-col overflow-hidden">
+                <div class="bg-slate-800/50 p-6 border-b border-slate-800 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Test de Cinemática</h2>
+                        <p class="text-slate-400 text-xs mt-1" id="page-indicator">Página 1 de 10</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="bg-blue-600 px-4 py-2 rounded-lg text-white font-bold text-sm" id="score-display">0 / 0</div>
+                        <div class="flex gap-1">
+                            <button onclick="prevPage()" id="prev-btn" class="p-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg disabled:opacity-30 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+                            </button>
+                            <button onclick="nextPage()" id="next-btn" class="p-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg disabled:opacity-30 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="quiz-container" class="p-8 space-y-12">
+                    <!-- Dinámico -->
+                </div>
+
+                <div class="p-6 bg-slate-800/30 text-center">
+                    <button onclick="resetQuiz()" class="px-6 py-2 bg-red-900/20 hover:bg-red-900/40 text-red-400 border border-red-900/50 rounded-lg text-xs uppercase tracking-widest font-bold transition-all">
+                        Reiniciar Progreso
+                    </button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script>
+        const quizData = [
+            { q: "¿Qué estudia la cinemática?", options: ["Las causas del movimiento", "El movimiento sin atender a sus causas", "La energía de los cuerpos"], correct: 1, exp: "La cinemática describe cómo se mueven los cuerpos sin importar las fuerzas que lo originan." },
+            { q: "¿Es el movimiento un concepto absoluto?", options: ["Sí, siempre", "No, depende del sistema de referencia", "Solo en el vacío"], correct: 1, exp: "El movimiento es relativo. Depende de dónde esté situado el observador." },
+            { q: "Si el vector posición es $\\vec{r}(t) = 3t\\vec{i} + 2\\vec{j}$, ¿cuál es la posición en $t=2$s?", options: ["$6\\vec{i} + 2\\vec{j}$", "$3\\vec{i} + 2\\vec{j}$", "$6\\vec{i} + 4\\vec{j}$"], correct: 0, exp: "Sustituyendo $t=2$ en $3t$ obtenemos 6. La componente $y$ se mantiene en 2." },
+            { q: "¿Qué diferencia el desplazamiento de la distancia recorrida?", options: ["Son lo mismo", "La distancia es el módulo del desplazamiento siempre", "El desplazamiento es el vector entre inicio y fin; la distancia es la trayectoria"], correct: 2, exp: "El desplazamiento es la línea recta entre inicio y fin; la distancia es el camino real seguido." },
+            { q: "¿Cómo se define la velocidad instantánea?", options: ["Como la derivada de la posición respecto al tiempo", "Como el espacio partido por el tiempo total", "Como la integral de la aceleración"], correct: 0, exp: "La velocidad instantánea es $\\vec{v} = d\\vec{r}/dt$." },
+            { q: "Un coche va a 100 km/h por una curva. ¿Tiene aceleración?", options: ["No, su rapidez es constante", "Sí, tiene aceleración normal", "Sí, tiene aceleración tangencial"], correct: 1, exp: "Toda curva implica un cambio de dirección, lo que genera aceleración normal." },
+            { q: "¿Cuándo es nula la aceleración tangencial?", options: ["En movimientos rectilíneos", "Cuando el módulo de la velocidad es constante", "Cuando el cuerpo está parado"], correct: 1, exp: "La aceleración tangencial mide el cambio en la rapidez (módulo)." },
+            { q: "¿Hacia dónde apunta siempre la aceleración normal?", options: ["Hacia afuera de la curva", "Tangente a la trayectoria", "Hacia el centro de curvatura"], correct: 2, exp: "Apunta al centro del giro, por eso es centrípeta." },
+            { q: "Si un cuerpo tiene $a_t = 3$ y $a_n = 4$, ¿cuál es el módulo de su aceleración total?", options: ["7", "1", "5"], correct: 2, exp: "Aplicamos Pitágoras: $\\sqrt{3^2 + 4^2} = 5$." },
+            { q: "En un movimiento rectilíneo, ¿cuánto vale $a_n$?", options: ["9.8", "0", "Depende de la velocidad"], correct: 1, exp: "En una línea recta no hay cambio de dirección, por tanto $a_n$ es cero." },
+            { q: "¿Qué caracteriza al Movimiento Rectilíneo Uniforme (MRU)?", options: ["Aceleración constante", "Velocidad constante", "Trayectoria circular"], correct: 1, exp: "Velocidad constante implica rapidez y dirección invariables." },
+            { q: "En una gráfica Posición-Tiempo de un MRU, ¿qué representa la pendiente?", options: ["La aceleración", "La posición inicial", "La velocidad"], correct: 2, exp: "La pendiente de $x$ frente a $t$ es la velocidad." },
+            { q: "¿Cuál es la aceleración en un MRUV?", options: ["Cero", "Variable", "Constante"], correct: 2, exp: "En el uniformemente variado, la aceleración no cambia con el tiempo." },
+            { q: "Un objeto cae en el vacío (caída libre). ¿Qué tipo de movimiento es?", options: ["MRU", "MRUA con $a=g$", "Movimiento parabólico"], correct: 1, exp: "Es una aceleración constante hacia abajo debido a la gravedad." },
+            { q: "Si lanzas una pelota hacia arriba, ¿cuál es su velocidad en el punto más alto?", options: ["9.8 m/s", "Máxima", "0 m/s"], correct: 2, exp: "El objeto se detiene un instante antes de empezar a caer." },
+            { q: "¿Qué afirmó Galileo sobre la caída de los cuerpos en el vacío?", options: ["Los pesados caen antes", "Todos caen con la misma aceleración", "Depende de su forma"], correct: 1, exp: "Sin resistencia del aire, la masa no influye en la aceleración de caída." },
+            { q: "En el tiro parabólico, ¿cómo es el movimiento en el eje horizontal?", options: ["MRU", "MRUA", "Circular"], correct: 0, exp: "No hay fuerzas horizontales, por lo que la velocidad es constante." },
+            { q: "En el tiro parabólico, ¿qué fuerza causa el movimiento en el eje vertical?", options: ["La inercia", "La gravedad", "La fuerza del lanzamiento"], correct: 1, exp: "La gravedad acelera el cuerpo hacia abajo continuamente." },
+            { q: "¿A qué ángulo se consigue el alcance máximo?", options: ["30°", "60°", "45°"], correct: 2, exp: "A 45° se maximiza el producto de velocidad horizontal y tiempo de vuelo." },
+            { q: "¿Qué es el 'tiempo de vuelo'?", options: ["Tiempo hasta la altura máxima", "Tiempo total en el aire", "La velocidad final"], correct: 1, exp: "Es el tiempo total desde que sale hasta que llega al suelo." },
+            { q: "¿Qué es el radio de curvatura?", options: ["La distancia al origen", "El radio del círculo tangente a la curva", "La trayectoria"], correct: 1, exp: "Define cuán cerrada es una curva en un punto concreto." },
+            { q: "Si la aceleración es siempre perpendicular a la velocidad...", options: ["Es rectilíneo", "Es circular uniforme", "Es parabólico"], correct: 1, exp: "Si solo hay $a_n$, la rapidez no cambia pero gira en círculo." },
+            { q: "¿Puede haber velocidad cero y aceleración distinta de cero?", options: ["No", "Sí", "Solo en el vacío"], correct: 1, exp: "Sí, en el punto de máxima altura de un lanzamiento vertical." },
+            { q: "¿Qué significa una aceleración de $-2 m/s^2$?", options: ["Retroceso", "Pérdida de 2 m/s cada segundo", "Reposo"], correct: 1, exp: "Es un frenado o deceleración uniforme." },
+            { q: "La unidad de la aceleración en el SI es...", options: ["$m/s$", "$m \cdot s$", "$m/s^2$"], correct: 2, exp: "Metros por segundo al cuadrado ($m/s^2$)." },
+            { q: "En un lanzamiento horizontal, ¿de qué depende el tiempo de caída?", options: ["De la velocidad horizontal", "De la altura inicial", "De la masa"], correct: 1, exp: "El tiempo depende solo de la altura vertical: $t = \sqrt{2h/g}$." },
+            { q: "¿Cómo se calcula $v_{0y}$ con ángulo $\\alpha$?", options: ["$v_0 \sin(\alpha)$", "$v_0 \cos(\alpha)$", "$v_0 \tan(\alpha)$"], correct: 0, exp: "Usamos el seno para la componente opuesta al ángulo (vertical)." },
+            { q: "La gráfica Velocidad-Tiempo en un MRUA es...", options: ["Parábola", "Recta inclinada", "Recta horizontal"], correct: 1, exp: "La velocidad crece linealmente con el tiempo." },
+            { q: "¿Qué es un sistema de referencia inercial?", options: ["Aquel sin aceleración", "Aquel que acelera", "El centro de la Tierra"], correct: 0, exp: "Aquel que está en reposo o se mueve a velocidad constante." },
+            { q: "¿Es nula $a_n$ en el punto más alto de una parábola?", options: ["Sí", "No, vale $g$", "No, vale 0"], correct: 1, exp: "La aceleración es vertical ($g$) y la velocidad horizontal, por lo que son perpendiculares: $a_n = g$." }
+        ];
+
+        let currentPage = 0;
+        const questionsPerPage = 3;
+        let score = 0;
+        let answeredQuestions = new Set();
+        let userResponses = {};
+
         function toggleDarkMode() {
             document.documentElement.classList.toggle('dark');
             localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
         }
 
-        if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
-
         function switchTab(tab) {
-            const tabs = ['theory', 'formulas', 'quiz'];
-            tabs.forEach(t => {
+            ['theory', 'formulas', 'quiz'].forEach(t => {
                 document.getElementById(`${t}-content`).classList.remove('active');
                 document.getElementById(`btn-${t}`).classList.remove('nav-btn-active');
                 document.getElementById(`btn-${t}`).classList.add('text-slate-600', 'dark:text-slate-400');
@@ -200,7 +194,114 @@
             document.getElementById(`${tab}-content`).classList.add('active');
             document.getElementById(`btn-${tab}`).classList.add('nav-btn-active');
             document.getElementById(`btn-${tab}`).classList.remove('text-slate-600', 'dark:text-slate-400');
+            if (tab === 'quiz') renderCurrentPage();
             initMath();
+        }
+
+        function renderCurrentPage() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            const start = currentPage * questionsPerPage;
+            const end = Math.min(start + questionsPerPage, quizData.length);
+            
+            for (let i = start; i < end; i++) {
+                const item = quizData[i];
+                const qDiv = document.createElement('div');
+                qDiv.id = `q-container-${i}`;
+                qDiv.className = "bg-slate-800/40 p-6 rounded-2xl border border-slate-700/50 transition-all duration-300";
+                
+                // Aplicar bordes si ya está respondida
+                if (userResponses[i] !== undefined) {
+                    if (userResponses[i] === item.correct) qDiv.classList.add('question-correct');
+                    else qDiv.classList.add('question-wrong');
+                }
+
+                qDiv.innerHTML = `<h3 class="text-white font-bold mb-5 flex gap-3"><span class="text-blue-500">#${i+1}</span> ${item.q}</h3>`;
+                
+                const optionsGrid = document.createElement('div');
+                optionsGrid.className = "grid grid-cols-1 gap-3";
+
+                item.options.forEach((opt, oi) => {
+                    const btn = document.createElement('button');
+                    btn.className = "option-btn w-full text-left p-4 rounded-xl bg-slate-700/50 text-slate-200 border border-slate-600 hover:bg-slate-700 transition-all text-sm";
+                    btn.innerHTML = opt;
+                    
+                    if (userResponses[i] !== undefined) {
+                        btn.disabled = true;
+                        if (oi === item.correct) btn.classList.add('btn-correct');
+                        if (userResponses[i] === oi && oi !== item.correct) btn.classList.add('btn-wrong');
+                    }
+
+                    btn.onclick = () => handleAnswer(i, oi, btn, optionsGrid, qDiv);
+                    optionsGrid.appendChild(btn);
+                });
+
+                qDiv.appendChild(optionsGrid);
+                if (userResponses[i] !== undefined) showExplanation(qDiv, item.exp);
+                container.appendChild(qDiv);
+            }
+
+            updateControls();
+            initMath();
+        }
+
+        function handleAnswer(qIdx, optionIdx, btn, grid, container) {
+            if (userResponses[qIdx] !== undefined) return;
+
+            userResponses[qIdx] = optionIdx;
+            const item = quizData[qIdx];
+            const buttons = grid.querySelectorAll('button');
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if (optionIdx === item.correct) {
+                btn.classList.add('btn-correct');
+                container.classList.add('question-correct');
+                score++;
+            } else {
+                btn.classList.add('btn-wrong');
+                buttons[item.correct].classList.add('btn-correct');
+                container.classList.add('question-wrong');
+            }
+
+            answeredQuestions.add(qIdx);
+            document.getElementById('score-display').innerText = `${score} / ${answeredQuestions.size}`;
+            
+            showExplanation(container, item.exp);
+            initMath();
+        }
+
+        function showExplanation(container, text) {
+            const exp = document.createElement('div');
+            exp.className = "explanation-box mt-5 p-4 bg-slate-900 border-t border-slate-700 rounded-b-xl text-blue-300 text-xs italic leading-relaxed";
+            exp.innerHTML = `<b>¿Por qué?:</b> ${text}`;
+            container.appendChild(exp);
+        }
+
+        function updateControls() {
+            const totalPages = Math.ceil(quizData.length / questionsPerPage);
+            document.getElementById('page-indicator').innerText = `Página ${currentPage + 1} de ${totalPages}`;
+            document.getElementById('prev-btn').disabled = currentPage === 0;
+            document.getElementById('next-btn').disabled = currentPage === totalPages - 1;
+        }
+
+        function nextPage() { if ((currentPage + 1) * questionsPerPage < quizData.length) { currentPage++; renderCurrentPage(); } }
+        function prevPage() { if (currentPage > 0) { currentPage--; renderCurrentPage(); } }
+
+        function resetQuiz() {
+            // Reinicio completo de variables de estado
+            score = 0;
+            currentPage = 0;
+            answeredQuestions = new Set();
+            userResponses = {};
+            
+            // Actualización de la UI
+            document.getElementById('score-display').innerText = `0 / 0`;
+            renderCurrentPage();
+            
+            // Scroll al inicio del contenedor
+            document.querySelector('main').scrollTop = 0;
         }
 
         function initMath() {
@@ -210,49 +311,14 @@
             });
         }
 
-        const quizData = [
-            {
-                q: "Un patinador va a 20 km/h constantes en línea recta. ¿Cuál es su aceleración normal?",
-                options: ["$9.8 m/s^2$", "$0 m/s^2$", "No se puede saber sin el radio"],
-                correct: 1,
-                exp: "¡Correcto! Si el movimiento es en línea recta, no hay giro, por lo que $a_n = 0$."
-            },
-            {
-                q: "¿Qué componente de la aceleración se encarga de que un coche pase de 80 km/h a 100 km/h?",
-                options: ["Normal", "Centrípeta", "Tangencial"],
-                correct: 2,
-                exp: "Exacto. La tangencial es la responsable de los cambios en el módulo de la velocidad (rapidez)."
-            }
-        ];
-
-        let score = 0; let total = 0;
-        function renderQuiz() {
-            const container = document.getElementById('quiz-container');
-            container.innerHTML = '';
-            quizData.forEach((item, i) => {
-                const div = document.createElement('div');
-                div.className = "bg-slate-800 p-6 rounded-2xl border border-slate-700";
-                div.innerHTML = `<h3 class="text-white font-bold mb-4">${i+1}. ${item.q}</h3>`;
-                item.options.forEach((opt, oi) => {
-                    const btn = document.createElement('button');
-                    btn.className = "w-full text-left p-4 mb-2 rounded-xl bg-slate-700 text-slate-100 hover:bg-slate-600 transition-all";
-                    btn.innerHTML = opt;
-                    btn.onclick = () => {
-                        if(btn.parentElement.dataset.answered) return;
-                        btn.parentElement.dataset.answered = "true";
-                        total++;
-                        if(oi === item.correct) { btn.classList.add('correct-answer'); score++; }
-                        else btn.classList.add('wrong-answer');
-                        document.getElementById('score-display').innerText = `${score} / ${total}`;
-                    };
-                    div.appendChild(btn);
-                });
-                container.appendChild(div);
-            });
-            initMath();
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
         }
 
-        window.onload = () => { initMath(); renderQuiz(); };
+        window.onload = () => {
+            renderCurrentPage();
+            initMath();
+        };
     </script>
 </body>
 </html>
